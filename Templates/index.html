@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .dropdown_form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            gap: 20px;
+        }
+
+        .dropdown_select {
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            width: 250px;
+            background-color: #f8f8f8;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            appearance: none;
+        }
+
+        .dropdown_select:hover {
+            background-color: #f0f0f0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown_select option {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .dropdown_select option:hover {
+            background-color: #f1c40f;
+            transform: scale(1.1);
+        }
+
+        .dropdown_select option:nth-child(1) {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(2) {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(3) {
+            background-color: orangered;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(4) {
+            background-color: #9b59b6;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(5) {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(6) {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(7) {
+            background-color: #f1c40f;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(8) {
+            background-color: #34495e;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(9) {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .dropdown_select option:nth-child(10) {
+            background-color: #9b59b6;
+            color: white;
+        }
+
+        .submit_button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .submit_button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .submit_button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Bine ati venit</h1>
+    <form action="/show-data" method="POST" class="dropdown_form">
+        <label for="tabel">Alege un tabel pentru a-l vizualiza:</label>
+        <select name="tabel" id="tabel" class="dropdown_select">
+            <option value="client">Clienti</option>
+            <option value="angajat">Angajati</option>
+            <option value="sala">Sali</option>
+            <option value="statie">Statii</option>
+            <option value="defectiuni">Defectiuni</option>
+            <option value="periferice">Periferice</option>
+            <option value="sesiune">Sesiuni</option>
+            <option value="rezervare">Rezervari</option>
+            <option value="vizualizare_compusa">Vizualizare Compusa</option>
+            <option value="vizualizare_complexa">Vizualizare Complexa</option>
+        </select>
+        <button type="submit" class="submit_button">Afiseaza</button>
+    </form>
+</body>
+</html>

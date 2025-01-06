@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Filtrare sali</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .home_button, .filter_button {
+            background-color: limegreen;
+            color: white;
+            padding: 10px 20px;
+            border: none; 
+            border-radius: 8px;
+            font-size: 16px; 
+            cursor: pointer; 
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .home_button:hover, .filter_button:hover {
+            background-color: greenyellow;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <a href="/show-data?tabel=sala">
+        <button class="home_button">Inapoi la sali</button>
+    </a>
+
+    <h1 style="text-align: center;">Filtrare sali dupa performanta</h1>
+
+    <form style="width: 80%; margin: 20px auto; text-align: center;" action="/filter-sali" method="POST">
+        <label for="min_performance" style="font-size: 18px;">Selecteaza gradul de performanta:</label>
+        <select id="min_performance" name="min_performance" style="padding: 5px; font-size: 16px; margin: 10px;">
+            <option value="1">1 - Foarte Scazut</option>
+            <option value="2">2 - Scazut</option>
+            <option value="3">3 - Mediu</option>
+            <option value="4">4 - Ridicat</option>
+            <option value="5">5 - Excelent</option>
+        </select>
+        <button type="submit" class="filter_button">Filtreaza</button>
+    </form>
+
+    {% if rows %}
+    <table>
+        <thead>
+            <tr>
+                {% for col in cols %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for col in cols %}
+                    <td>{{ row[loop.index0] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h3 style="text-align: center; color: grey;">Nu s-au gasit rezultate pentru gradul selectat.</h3>
+    {% endif %}
+</body>
+</html>

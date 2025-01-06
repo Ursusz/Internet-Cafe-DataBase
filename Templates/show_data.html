@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Date din Internet cafe</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .home_button, .insert_button {
+            background-color: limegreen;
+            color: white;
+            padding: 10px 20px;
+            border: none; 
+            border-radius: 8px;
+            font-size: 16px; 
+            cursor: pointer; 
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .home_button:hover, .insert_button:hover {
+            background-color: greenyellow;
+            transform: scale(1.1);
+        }
+        .edit_button, .delete_button , .ok_button, .save_button, .sort_button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .edit_button {
+            background-color: deepskyblue;
+            color: white;
+        }
+        .edit_button:hover {
+            background-color: dodgerblue;
+            transform: scale(1.1);
+        }
+        .delete_button {
+            background-color: red;
+            color: white;
+        }
+        .delete_button:hover {
+            background-color: darkred;
+            transform: scale(1.1);
+        }
+        .insert_form {
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            width: 80%;
+            font-family: Arial, sans-serif;
+            display: none;
+        }
+        .insert_form input {
+            margin: 10px 0;
+            padding: 5px;
+            width: 100%;
+        }
+        .ok_button {
+            background-color: green;
+            color: white;
+        }
+        .ok_button:hover {
+            background-color: greenyellow;
+            transform: scale(1.1);
+        }
+        .save_button {
+            background-color: green;
+            color: white;
+        }
+        .save_button:hover {
+            background-color: greenyellow;
+            transform: scale(1.1);
+        }
+        .sort_button {
+            padding: 10px 20px;
+            background-color: aqua;
+            color: white;
+        }
+        .sort_button:hover {
+            background-color: aquamarine;
+            transform: scale(1.1)
+        }
+        .sort_form {
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            width: 80%;
+            font-family: Arial, sans-serif;
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleInsertForm() {
+            const form = document.getElementById("insertForm");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+        function showEditForm(rowId) {
+            const editForm = document.getElementById("editForm_" + rowId);
+            const viewRow = document.getElementById("viewRow_" + rowId);
+            
+            viewRow.style.display = "none";
+            editForm.style.display = "table-row";
+        }
+
+        function closeEditForm(rowId) {
+            const editForm = document.getElementById("editForm_" + rowId);
+            const viewRow = document.getElementById("viewRow_" + rowId);
+
+            editForm.style.display = "none";
+            viewRow.style.display = "table-row";
+        }
+
+        function toggleSortForm() {
+            const form = document.getElementById("sortForm");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+        window.onload = function() {
+            var messages = JSON.parse(document.getElementById('flash-messages').textContent);
+            messages.forEach(function(message) {
+                showPopup(message[1]);
+            });
+        };
+
+        function showPopup(message) {
+            alert(message);
+        }
+        
+    </script>
+</head>
+<body>
+    <div id="flash-messages" style="display: none;">
+        {{ get_flashed_messages(with_categories=True) | tojson }}
+    </div>
+    <a href="/">
+        <button class="home_button">Return Home</button>
+    </a>
+    <div style="text-align: left; margin-top: 10px;">
+        <button class="sort_button" onclick="toggleSortForm()">Sort By</button>
+    </div>
+    <h1 style="text-align: center;">Vizualizare Date</h1>
+    
+    {% if tabel != 'vizualizare_complexa' %}
+        <div style="text-align: center; margin: 20px;">
+            <button class="insert_button" onclick="toggleInsertForm()">Insert into {{ tabel }}</button>
+        </div>
+    {% endif %}
+    <div style="text-align: center; margin: 20px;">
+        {% if tabel == 'sala' %}
+            <a href="/filter-sali">
+                <button class="insert_button">Filtreaza sali dupa performanta</button>
+            </a>
+        {% endif %}
+        {% if tabel == 'periferice' %}
+        <a href="/filter-periferice">
+            <button class="insert_button">Filtreaza periferice</button>
+        </a>
+        {% endif %}
+    </div>
+
+    <form id="insertForm" class="insert_form" action="/insert/{{ tabel }}" method="POST">
+        {% if tabel == 'vizualizare_compusa' %}
+            {% for col in cols[:3] %}
+                <label for="{{ col }}">{{ col }}</label>
+                <input type="text" id="{{ col }}" name="{{ col }}" placeholder="Enter {{ col }}">
+            {% endfor %}
+        {% else %}
+            {% for col in cols %}
+                <label for="{{ col }}">{{ col }}</label>
+                <input type="text" id="{{ col }}" name="{{ col }}" placeholder="Enter {{ col }}">
+            {% endfor %}
+        {% endif %}
+        <button type="submit" class="insert_button">Submit</button>
+    </form>
+
+    <div id="sortForm" style="display: none; text-align: center;">
+        <form action="/sort/{{ tabel }}" method="POST">
+            <h3>Selecteaza coloanele pentru sortare:</h3>
+            <select name="sort_directions">
+                <option value="ASC">Crescator</option>
+                <option value="DESC">Descrescator</option>
+            </select>
+            {% for col in cols %}
+            <div>
+                <label>
+                    <input type="checkbox" name="sort_columns" value="{{ col }}"> {{ col }}
+                </label>
+            </div>
+            {% endfor %}
+            <button type="submit" class="sort_button">Sorteaza</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                {% for col in cols %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+                {% if tabel != 'vizualizare_complexa' %}
+                    <th>Actiune</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr id="viewRow_{{ row[0] }}">
+                    {% if tabel == 'vizualizare_complexa' %}
+                        {% for col in cols[:2] %}
+                            <td>{{ row[loop.index0] }}</td>
+                        {% endfor %}
+                    {% else %}
+                        {% for col in cols %}
+                            <td>{{ row[loop.index0] }}</td>
+                        {% endfor %}
+                    {% endif %}
+                    {% if tabel != 'vizualizare_complexa' %}
+                        <td>
+                            <button class="edit_button" onclick="showEditForm('{{ row[0] }}')">Edit</button>
+                            <form action="/delete/{{ tabel }}/{{ cols[0] }}/{{ row[0] }}" method="POST" style="display:inline;">
+                                <button type="submit" class="delete_button">Delete</button>
+                            </form>
+                        </td>
+                    {% endif %}
+                </tr>
+                
+                {% if tabel != 'vizualizare_complexa' %}
+                <tr id="editForm_{{ row[0] }}" style="display:none;">
+                    <form action="" method="POST">
+                        {% if tabel == 'vizualizare_compusa' %}
+                            {% for col in cols[:3] %}
+                                <td>
+                                    <input type="text" name="{{ col }}" value="{{ row[loop.index0] }}">
+                                    <br>
+                                    <button type="submit" class="save_button" formaction="/edit/{{ tabel }}/{{ cols[0] }}/{{ col }}/{{ row[0] }}">Save</button>
+                                </td>
+                            {% endfor %}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        {% else %}
+                            {% for col in cols %}
+                                <td>
+                                    <input type="text" name="{{ col }}" value="{{ row[loop.index0] }}">
+                                    <br>
+                                    <button type="submit" class="save_button" formaction="/edit/{{ tabel }}/{{ cols[0] }}/{{ col }}/{{ row[0] }}">Save</button>
+                                </td>
+                            {% endfor %}
+                        {% endif %}
+                        <td>
+                            <button type="button" class="ok_button" onclick="closeEditForm('{{ row[0] }}')">OK</button>
+                        </td>
+                    </form>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

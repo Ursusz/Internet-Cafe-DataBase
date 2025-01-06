@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Filtrare periferice</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .home_button, .filter_button {
+            background-color: limegreen;
+            color: white;
+            padding: 10px 20px;
+            border: none; 
+            border-radius: 8px;
+            font-size: 16px; 
+            cursor: pointer; 
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .home_button:hover, .filter_button:hover {
+            background-color: greenyellow;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <a href="/show-data?tabel=periferic">
+        <button class="home_button">Inapoi la periferice</button>
+    </a>
+
+    <h1 style="text-align: center;">Filtrare periferice</h1>
+    <h2 style="text-align: center;">Vizualizati perifericele dintr-o anumita sala care sunt conectate la o statie ce ruleaza pe un anumit sistem de operare</h2>
+
+    <form style="width: 80%; margin: 20px auto; text-align: center;" action="/filter-periferice" method="POST">
+        <label for="max_sala" style="font-size: 18px;">Numarul salii:</label>
+        <input type="text" id="max_sala" name="max_sala" style="padding: 5px; font-size: 16px; margin: 10px;" required>
+
+        <label for="sistem_operare" style="font-size: 18px;">Sistem de operare:</label>
+        <select id="sistem_operare" name="sistem_operare" style="padding: 5px; font-size: 16px; margin: 10px;" required>
+            <option value="" disabled selected>Selecteaza un sistem de operare</option>
+            <option value="windows10">Windows 10</option>
+            <option value="windows11">Windows 11</option>
+            <option value="linux">Linux</option>
+            <option value="Free BSD">Free BSD</option>
+            <option value="Xbox OS">Xbox OS</option>
+        </select>
+
+        <button type="submit" class="filter_button">Filtreaza</button>
+    </form>
+
+    {% if rows %}
+    <table>
+        <thead>
+            <tr>
+                {% for col in cols %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for col in cols %}
+                    <td>{{ row[loop.index0] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h3 style="text-align: center; color: grey;">Nu s-au gasit rezultate pentru criteriile selectate.</h3>
+    {% endif %}
+</body>
+</html>
