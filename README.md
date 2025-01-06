@@ -24,6 +24,7 @@ To run and test the application, follow these steps:
   ```bash
   python main.py
 
+![DatabaseDiagram](E-RDIAGRAM.png)
 
 ![DatabaseMainPage](./Images/DatabaseMainPage.png)
 
